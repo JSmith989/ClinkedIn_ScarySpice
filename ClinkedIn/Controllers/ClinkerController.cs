@@ -43,6 +43,14 @@ namespace ClinkedIn.Controllers
             return Ok(clinker);
         }
 
+        // API Post to /api/Clinker
+        [HttpPost]
+        public IActionResult AddAClinker(Clinker clinker)
+        {
+            _repo.Add(clinker);
+            return Created($"/api/Clinker/{clinker.Id}", clinker);
+        }
+
         //Delete clinker from list of Clinkers
         // /api/Clinker/warden/deleteClinker
         /*
@@ -91,13 +99,8 @@ namespace ClinkedIn.Controllers
                     return Ok(_repo.GetAllServices());
                 }
 
-                // API Post to /api/Clinker
-                [HttpPost]
-                public IActionResult AddAClinker(Clinker clinker)
-                {
-                    _repo.Add(clinker);
-                    return Created($"/api/Clinker/{clinker.SerialNumber}", clinker);
-                }
+                
+               
 
                 // Show all Clinker's friends
                 // /api/clinker/{serialNumber}/friends

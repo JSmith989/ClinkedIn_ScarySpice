@@ -40,14 +40,19 @@ namespace ClinkedIn.DataAccess
             return clinker;
         }
 
+        public void Add(Clinker clinker)
+        {
+            var sql = @"INSERT INTO [dbo].[Clinkers] ([Name], [DaysRemaining])
+			                   OUTPUT inserted.Id, inserted.Name, inserted.DaysRemaining
+			                   VALUES(@Name, @DaysRemaining)";
+            using var db = new SqlConnection(ConnectionString);
+            var id = db.ExecuteScalar<int>(sql, clinker);
+            clinker.Id = id;
+        }
+
         /*
 
-                public void Add(Clinker clinker)
-                {
-                    var biggestExistingInt = _clinkers.Max(clinker => clinker.Id);
-                    clinker.Id = biggestExistingInt + 1;
-                    _clinkers.Add(clinker);
-                }
+                
 
                 public Dictionary<string, List<string>> GetAllInterests()
                 {
