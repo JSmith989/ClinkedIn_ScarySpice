@@ -51,6 +51,23 @@ namespace ClinkedIn.Controllers
             return Created($"/api/Clinker/{clinker.Id}", clinker);
         }
 
+        //GetListOfMyServices /api/clinker/serialNumber/services
+        [HttpGet("{serialNumber}/services")]
+        public IActionResult GetListOfMyServices(int serialNumber)
+        {
+            var clinker = _repo.Get(serialNumber);
+            if (clinker == null)
+            {
+                return NotFound("This clinker does not exist");
+            }
+            if (_repo.GetMyServices(serialNumber).Count == 0)
+            {
+                return NotFound($"{clinker.Name} does not have any services");
+            }
+
+            return Ok(_repo.GetMyServices(serialNumber));
+        }
+
         //Delete clinker from list of Clinkers
         // /api/Clinker/warden/deleteClinker
         /*

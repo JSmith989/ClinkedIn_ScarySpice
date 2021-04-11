@@ -50,6 +50,31 @@ namespace ClinkedIn.DataAccess
             clinker.Id = id;
         }
 
+        public List<string> GetMyServices(int id)
+        {
+            var sql = @"SELECT *
+                        FROM ClinkerServices
+                        WHERE Id = @id";
+
+            var serviceSql = @"Select *
+                        from Services
+                        where Id = @serviceId";
+            using var db = new SqlConnection(ConnectionString);
+            var services = new List<string>();
+
+            var clinkerServices = db.Query<ClinkerService>(sql, new { id }).ToList();
+
+            foreach (var clinkerService in clinkerServices)
+            {
+                var service = db.QueryFirstOrDefault<Service>(serviceSql, new { serviceId = clinkerService.ServiceId });
+                services.Add(service.Name);
+            }
+
+            return services;
+
+
+        }
+
         /*
 
                 
